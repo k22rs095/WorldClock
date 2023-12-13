@@ -15,33 +15,6 @@
 
     </style>
     <script>
-        // timer処理
-        $(function() {
-            setInterval(function() {
-                timer();
-            }, 500);
-        });
-
-        // ready クリックの処理の登録
-        $(function() {
-            $('#date').click(function(e) {
-                setDebugMode(e);
-            });
-
-            $('#btnA').click(function(e) {
-                btnAClick(e);
-            });
-
-            $('#btnB').click(function(e) {
-                btnBClick(e);
-            });
-
-            $('#btnC').click(function(e) {
-                btnCClick(e);
-            });
-            init();
-        });
-
         function rgbToColor(r, g, b) {
             return "#" + hex02(r) + hex02(g) + hex02(b);
         }
@@ -92,7 +65,7 @@
             ctx.stroke();
         }
         // 時計 clock(時, 分, 秒, 残り時間が短い時に不要な針を隠す)
-        function clock(hour, minute, second, hide) {
+        function showAnalogClock(hour, minute, second, hide=false) {
             var canvas = $('#mycanvas')[0];
             var ctx = canvas.getContext('2d');
             ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
@@ -166,6 +139,28 @@
             $('#btnA').prop('disabled', false);
             $('#btnB').prop('disabled', false);
             $('#btnC').prop('disabled', false);
+
+            // timer処理の登録
+            $(function() {
+                setInterval(function() {
+                    timer();
+                }, 1000);
+            });
+
+            // クリック時の処理の登録
+            $(function() {
+                $('#btnA').click(function(e) {
+                    btnAClick(e);
+                });
+
+                $('#btnB').click(function(e) {
+                    btnBClick(e);
+                });
+
+                $('#btnC').click(function(e) {
+                    btnCClick(e);
+                });
+            });
 
             $("#hour").on(
                 "input", function() {
@@ -328,7 +323,7 @@
 </head>
 
 <body>
-    <canvas id="mycanvas" width="200" height="200">Test</canvas>
+    <canvas id="mycanvas" width="300" height="300">Test</canvas>
 
     <div id="hourStr">〇</div>
     <div id="minuteStr">〇</div>
