@@ -15,6 +15,7 @@
 
     </style>
     <script>
+        // アナログ時計の描画用関数↓
         function rgbToColor(r, g, b) {
             return "#" + hex02(r) + hex02(g) + hex02(b);
         }
@@ -108,31 +109,19 @@
             var py = getY(cy, ds, 0.9);
             line(ctx, cx, cy, px, py, 5, 'rgb(128, 100, 255)')
         }
+        // アナログ時計の描画用関数↑
 
-        // 残り秒数アナログ表示
-        function analog(rest) {
-            var h = parseInt(rest / 3600);
-            var m = parseInt((rest - h * 3600) / 60);
-            var s = parseInt(rest - h * 3600 - m * 60);
-            clock(h, m, s, true);
-        }
 
+        // プログラムの実行時の処理↓
         $(function() {
             init();
         });
 
-        // ボタンの初期設定
+        // 初期設定用関数
         function init() {
             $('#btnA').prop('disabled', false);
             $('#btnB').prop('disabled', false);
             $('#btnC').prop('disabled', false);
-
-            // timer処理の登録
-            $(function() {
-                setInterval(function() {
-                    timer();
-                }, 1000);
-            });
 
             // クリック時の処理の登録
             $(function() {
@@ -169,15 +158,20 @@
             );
 
             // 変数宣言
-            var canvas, ctx;
-            var h, m, s, timeDifference;
+            var dateData;
+            var year, month, date;
+            var hour, minute, second;
+            var timeDifference;
             var countryName = "";
+            var canvas = $("#mycanvas")[0];
+            var ctx = canvas.getContext("2d");
 
-            canvas = $("#mycanvas")[0];
-            ctx = canvas.getContext("2d");
-
-            OutOfBoundsPrevention();
-            displayDataInfo();
+            // 時刻情報変更処理の登録
+            $(function() {
+                setInterval(function() {
+                    reloadDate();
+                }, 50);
+            });
         }
 
         // Alarmの処理
@@ -240,24 +234,18 @@
         }
 
         // 繰り返し実行する処理
-        function timer() {
-            if (active) {
-                time = parseInt((new Date() - startTime) / 1000);
-                rest = period - time;
-                h = parseInt(rest / 3600);
-                m = parseInt((rest - h * 3600) / 60);
-                s = parseInt(rest - (h * 3600 + m * 60));
+        function reloadDate() {
+            dateData = new Date();
+            timeDifference = 0;
 
-                analog(rest);
-                displayDataInfo();
+            year = dateData.getFullYear();
+            month = dateData.getMonth();
+            date = dateData.getDate();
+            hour = dateData.getHours() + timeDifference;
+            minute = dateData.getMinutes();
+            second = dateData.getSeconds();
 
-                if (rest <= 0) {
-                    active = false;
-                    alarm();
-                    $("#btnA").html("Start");
-                    $("#btnC").prop("disabled", false);
-                }
-            }
+            showAnalogClock(hour, minute, second);
         }
 
         function OutOfBoundsPrevention() {
@@ -315,7 +303,7 @@
 </head>
 
 <body>
-    <canvas id="mycanvas" width="300" height="300">Test</canvas>
+    <canvas id="mycanvas" width="400" height="400">Test</canvas>
 
     <div id="hourStr">〇</div>
     <div id="minuteStr">〇</div>
