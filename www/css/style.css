@@ -2,8 +2,13 @@
 body {
     background-color: skyblue;
 }
-#button {
+
+.clock {
+    color: #ffffff;
+    font-size: 40px;
     text-align: center;
+    position: absolute;
+    top: 0px; left: 0px; right: 0px;
 }
 
 .btn {
@@ -14,6 +19,10 @@ body {
     border-radius: 20px;
     margin-top: 10px; margin-bottom: 10px;
     width: 30%; height: 3em;
+}
+
+#button {
+    text-align: center;
 }
 
 #hourStr {
@@ -75,14 +84,6 @@ body {
 
 #time::after {
     content: "秒";
-}
-
-#mycanvas {
-    color: #ffffff;
-    font-size: 40px;
-    text-align: center;
-    position: absolute;
-    top: 0px; left: 0px; right: 0px;
 }
 
 #hour {
