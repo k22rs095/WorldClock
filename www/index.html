@@ -111,6 +111,11 @@
 
 
         // プログラムの実行時の処理↓
+        // NCMBアクセスのための準備
+        let ncmb = new NCMB(appKey, clientKey);
+        // 利用するデータベースの指定（存在しなければ生成）
+        let WorldClock = ncmb.DataStore("WorldClock");
+        
         $(function() {
             init();
         });
@@ -164,11 +169,6 @@
             var canvas = $("#mycanvas")[0];
             var ctx = canvas.getContext("2d");
 
-            // NCMBアクセスのための準備
-            let ncmb = new NCMB(appKey, clientKey);
-            // 利用するデータベースの指定（存在しなければ生成）
-            let worldClock = ncmb.DataStore("WorldClock");
-
             // 時刻情報変更処理の登録
             $(function() {
                 setInterval(function() {
@@ -194,7 +194,24 @@
 
         // ButtonAがクリックされた時の処理
         function btnAClick(e) {
-            
+            // レコードの登録処理
+            let wc = new WorldClock();
+            let countryName = $("#name").val();
+            let timeDifference = parseInt($("#td").val());
+            // set(フィールド, 値)
+            wc.set("Country", countryName)
+            wc.set("TimeDifference", timeDifference)
+                .save()
+                .then(function(res) {
+                    $("#info").html(
+                        "Registered!<br>"
+                    );
+                })
+                .catch(function(res) {
+                    $("#info").html(
+                        "Register Failed.<br>"
+                    );
+                })
         }
 
         // ButtonBがクリックされた時の処理
@@ -208,16 +225,7 @@
 
         // ButtonCがクリックされた時の処理
         function btnCClick(e) {
-            ctx.clearRect(0, 0, 300, 300);
-
-            h = 0; m = 0; s = 0;
-            rest = 0;
-            $("#hour").prop("value", h);
-            $("#minute").prop("value", m);
-            $("#second").prop("value", s);
-
-            OutOfBoundsPrevention();
-            displayDataInfo();
+            
         }
 
         // 繰り返し実行する処理
