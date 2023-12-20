@@ -109,13 +109,13 @@
         }
         // アナログ時計の描画用関数↑
 
-
         // プログラムの実行時の処理↓
         // NCMBアクセスのための準備
         let ncmb = new NCMB(appKey, clientKey);
         // 利用するデータベースの指定（存在しなければ生成）
         let WorldClock = ncmb.DataStore("WorldClock");
-        
+        let wc = new WorldClock();
+
         $(function() {
             init();
         });
@@ -166,6 +166,7 @@
             var hour, minute, second;
             var timeDifference;
             var countryName = "";
+            
             var canvas = $("#mycanvas")[0];
             var ctx = canvas.getContext("2d");
 
@@ -195,7 +196,6 @@
         // ButtonAがクリックされた時の処理
         function btnAClick(e) {
             // レコードの登録処理
-            let wc = new WorldClock();
             let countryName = $("#name").val();
             let timeDifference = parseInt($("#td").val());
             // set(フィールド, 値)
@@ -225,7 +225,35 @@
 
         // ButtonCがクリックされた時の処理
         function btnCClick(e) {
-            
+            WorldClock.fetchAll()
+                .then(function(res) {
+                    let msg = "";
+                    let c, t;
+
+                    for (let i = 0; i < res.length; i++) {
+                        c = res[i].get("Country");
+                        t = res[i].get("TimeDifference");
+
+                        
+                        
+                        msg += c + ", ";
+                        msg += t + "<br>";
+                    }
+
+                    if (res.length==0) {
+                        $("#info").html("No data registered.");
+                    } else {
+                        $("#info").html(msg);
+                    }
+                    
+                    
+
+                    
+
+                })
+                .catch(function(e) {
+                    $("#info").html("Fetch Failed:" + JSON.stringify(e));
+                })
         }
 
         // 繰り返し実行する処理
@@ -323,7 +351,7 @@
         </div>
         <div>
             <label for="info" class="lbl">
-                Information (Log):
+                Information (Data, Message):
             </label><br>
             <label id="info" class="field"></label>
         </div>
