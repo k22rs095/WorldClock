@@ -222,11 +222,14 @@
 
         // ButtonBがクリックされた時の処理
         function btnBClick(e) {
-            m += 100;
-            $("#minute").prop("value", m);
-            
-            OutOfBoundsPrevention();
-            displayDataInfo();
+            WorldClock.equalTo("Country",$("#name").val()).fetch()
+                .then(function(res) {
+                    res.delete();
+                    $("#info").html("Removed!<br>");
+                })
+                .catch(function(e) {
+                    $("#info").html("Remove Failed.<br>");
+                })
         }
 
         // ButtonCがクリックされた時の処理
