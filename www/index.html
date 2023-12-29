@@ -173,27 +173,14 @@
             var canvas = $("#mycanvas")[0];
             var ctx = canvas.getContext("2d");
 
+            fetchRegisteredData();
+
             // 時刻情報変更処理の登録
             $(function() {
                 setInterval(function() {
                     reloadDate();
                 }, 50);
             });
-        }
-
-        // Alarmの処理
-        function alarm() {
-            var img = new Image();
-            img.src = "ksuisbg.gif";
-            img.onload = function() {
-                ctx.drawImage(img, 0, 0, 300, 300);
-            };
-
-            var audio = new Audio();
-            audio.src = "pin.wav";
-            audio.play();
-
-            $("#btnA").prop("disabled", false);
         }
 
         // ButtonAがクリックされた時の処理
@@ -209,14 +196,13 @@
             wc.set("TimeDifference", timeDifference)
                 .save()
                 .then(function(res) {
-                    $("#info").html(
-                        "Registered!<br>"
-                    );
+                    $("#info").html("Registered!<br>");
+
+                    $("#name").val("");
+                    $("#td").val("");
                 })
                 .catch(function(res) {
-                    $("#info").html(
-                        "Register Failed.<br>"
-                    );
+                    $("#info").html("Register Failed.<br>");
                 })
         }
 
@@ -234,6 +220,26 @@
 
         // ButtonCがクリックされた時の処理
         function btnCClick(e) {
+            $("#name").val(country[index]);
+            $("#td").val(td[index++]);
+        }
+
+        // 繰り返し実行する処理
+        function reloadDate() {
+            dateData = new Date();
+            timeDifference = 0;
+
+            year = dateData.getFullYear();
+            month = dateData.getMonth();
+            date = dateData.getDate();
+            hour = dateData.getHours() + timeDifference;
+            minute = dateData.getMinutes();
+            second = dateData.getSeconds();
+
+            showAnalogClock(hour, minute, second);
+        }
+
+        function fetchRegisteredData() {
             WorldClock.fetchAll()
                 .then(function(res) {
                     let msg = "";
@@ -255,80 +261,10 @@
                     } else {
                         $("#info").html(msg);
                     }
-                    
-                    $("#name").val(country[index]);
-                    $("#td").val(td[index++]);
                 })
                 .catch(function(e) {
                     $("#info").html("Fetch Failed:" + JSON.stringify(e));
                 })
-        }
-
-        // 繰り返し実行する処理
-        function reloadDate() {
-            dateData = new Date();
-            timeDifference = 0;
-
-            year = dateData.getFullYear();
-            month = dateData.getMonth();
-            date = dateData.getDate();
-            hour = dateData.getHours() + timeDifference;
-            minute = dateData.getMinutes();
-            second = dateData.getSeconds();
-
-            showAnalogClock(hour, minute, second);
-        }
-
-        function OutOfBoundsPrevention() {
-            h = parseInt($("#hour").val());
-            m = parseInt($("#minute").val());
-            s = parseInt($("#second").val());
-
-            period = parseInt(3600 * h + 60 * m + s);
-
-            if (h<0) {
-                h = 0;
-            }
-            if (m<0) {
-                m = 0;
-            } else if (m>=60) {
-                h += parseInt(m/60);
-                m -= 60*parseInt(m/60);
-            }
-            if (s<0) {
-                s = 0;
-            } else if (s>=60) {
-                m += parseInt(s/60);
-                s -= 60*parseInt(m/60);
-            }
-
-            $("#hour").prop("value", h);
-            $("#minute").prop("value", m);
-            $("#second").prop("value", s);
-        }
-
-        function displayDataInfo() {
-            hstr = "";
-            mstr = "";
-            sstr = "";
-
-            for (var i = 0; i < h; i++) {
-                hstr += "○";
-            }
-            for (var i = 0; i < m; i++) {
-                mstr += "○";
-            }
-            for (var i = 0; i < s; i++) {
-                sstr += "○";
-            }
-            $("#hourStr").html(hstr);
-            $("#minuteStr").html(mstr);
-            $("#secondStr").html(sstr);
-
-            $("#time").html("経過時間： " + time);
-            $("#remain").html(
-                "残り時間： " + h + "時間" + m + "分" + s + "秒"
-            );
         }
     </script>
 </head>
