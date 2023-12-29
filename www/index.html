@@ -231,7 +231,7 @@
         // 繰り返し実行する処理
         function reloadDate() {
             dateData = new Date();
-            timeDifference = 0;
+            timeDifference = parseInt($("#td").val());
 
             year = dateData.getFullYear();
             month = dateData.getMonth();
