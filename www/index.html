@@ -186,6 +186,10 @@
 
         // ButtonAがクリックされた時の処理
         function btnAClick(e) {
+            if (!isContinue("register")) {
+                return;
+            }
+
             // レコードの登録処理
             let countryName = $("#name").val();
             let timeDifference = parseInt($("#td").val());
@@ -209,6 +213,10 @@
 
         // ButtonBがクリックされた時の処理
         function btnBClick(e) {
+            if (!isContinue("remove")) {
+                return;
+            }
+
             WorldClock.equalTo("Country",$("#name").val()).fetch()
                 .then(function(res) {
                     res.delete();
@@ -278,6 +286,12 @@
         function showCurrentData() {
             $("#name").val(country[index]);
             $("#td").val(td[index++]);
+        }
+
+        function isContinue(s) {
+            return confirm(
+                "Do you really want to " + s + " data?"
+            );
         }
     </script>
 </head>
