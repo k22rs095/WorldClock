@@ -144,25 +144,6 @@
                 });
             });
 
-            $("#hour").on(
-                "input", function() {
-                    OutOfBoundsPrevention();
-                    displayDataInfo();
-                }
-            );
-            $("#minute").on(
-                "input", function() {
-                    OutOfBoundsPrevention();
-                    displayDataInfo();
-                }
-            );
-            $("#second").on(
-                "input", function() {
-                    OutOfBoundsPrevention();
-                    displayDataInfo();
-                }
-            );
-
             // 変数宣言
             var dateData;
             var year, month, date;
