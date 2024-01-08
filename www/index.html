@@ -171,15 +171,11 @@
                 return;
             }
 
-            // レコードの登録処理
-            let countryName = $("#name").val();
-            let timeDifference = parseInt($("#td").val());
-
-            // set(フィールド, 値)
+            // set(フィールド, 値) <- レコードの登録処理
             let wc = new WorldClock();
 
-            wc.set("Country", countryName)
-            wc.set("TimeDifference", timeDifference)
+            wc.set("Country", $("#name").val())
+            wc.set("TimeDifference", parseInt($("#td").val()))
                 .save()
                 .then(function(res) {
                     alert("Registered!");
@@ -213,10 +209,6 @@
 
         // ButtonCがクリックされた時の処理
         function btnCClick(e) {
-            if (index==dataLength) {
-                index = 0;
-            }
-
             showCurrentData();
         }
 
@@ -226,7 +218,7 @@
             timeDifference = parseInt($("#td").val());
 
             year = dateData.getFullYear();
-            month = dateData.getMonth();
+            month = dateData.getMonth() + 1;
             date = dateData.getDate();
             hour = dateData.getHours() + timeDifference;
             minute = dateData.getMinutes();
@@ -270,6 +262,10 @@
         function showCurrentData() {
             $("#name").val(country[index]);
             $("#td").val(td[index++]);
+
+            if (index>=dataLength) {
+                index = 0;
+            }
         }
 
         function isContinue(s) {
