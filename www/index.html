@@ -201,10 +201,11 @@
             wc.set("TimeDifference", timeDifference)
                 .save()
                 .then(function(res) {
-                    $("#info").html("Registered!<br>");
+                    alert("Registered!");
 
                     $("#name").val("");
                     $("#td").val("");
+                    fetchRegisteredData();
                 })
                 .catch(function(res) {
                     $("#info").html("Register Failed.<br>");
@@ -220,7 +221,9 @@
             WorldClock.equalTo("Country",$("#name").val()).fetch()
                 .then(function(res) {
                     res.delete();
-                    $("#info").html("Removed!<br>");
+                    alert("Removed!");
+
+                    fetchRegisteredData();
                 })
                 .catch(function(e) {
                     $("#info").html("Remove Failed.<br>");
