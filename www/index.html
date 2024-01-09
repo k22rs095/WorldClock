@@ -116,6 +116,7 @@
         let WorldClock = ncmb.DataStore("WorldClock");
 
         var country, td, index;
+        var timeDifference = 0;
 
         $(function() {
             init();
@@ -147,7 +148,6 @@
             var year, month, date;
             var hour, minute, second;
             var countryName = "";
-            var timeDifference = 0;
             var dataLength = 0;
             
             var canvas = $("#mycanvas")[0];
@@ -213,7 +213,6 @@
         // 繰り返し実行する処理
         function reloadDate() {
             dateData = new Date();
-            timeDifference = parseInt($("#td").val());
 
             year = dateData.getFullYear();
             month = dateData.getMonth() + 1;
@@ -223,6 +222,7 @@
             second = dateData.getSeconds();
 
             showAnalogClock(hour, minute, second);
+            showDate();
         }
 
         function fetchRegisteredData() {
@@ -262,12 +262,26 @@
         }
 
         function showCurrentData() {
+            timeDifference = td[index];
+
             $("#name").val(country[index]);
             $("#td").val(td[index++]);
 
             if (index>=dataLength) {
                 index = 0;
             }
+        }
+
+        function showDate(h) {
+            if (h<0) {
+                hour += 24;
+
+            } else if (h>=24) {
+                hour -= 24;
+            }
+
+            console.log(year+"/"+month+"/"+date+"<br><br>");
+            console.log(hour);
         }
 
         function isContinue(s) {
@@ -294,18 +308,18 @@
             <label for="name" class="lbl">
                 Country(Region):
             </label>
-            <input id="name" type="text" class="field"></label>
+            <input id="name" type="text" class="field">
         </div>
         <div>
             <label for="timeDifference" class="lbl">
                 Time Difference:
             </label>
-            <input id="td" type="number" class="field"></label>
+            <input id="td" type="number" class="field">
         </div>
         <div>
             <label for="info" class="lbl">
                 Information (Data, Message):
-            </label><br>
+            </label>
             <label id="info" class="field"></label>
         </div>
     </div>
