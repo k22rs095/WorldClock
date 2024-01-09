@@ -11,6 +11,14 @@ body {
     top: 0px; left: 0px; right: 0px;
 }
 
+#date {
+    display: block;
+    margin-top: 8px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
 .btn {
     background-color: blue;
     color: white;
