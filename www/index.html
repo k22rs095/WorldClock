@@ -115,9 +115,7 @@
         // 利用するデータベースの指定（存在しなければ生成）
         let WorldClock = ncmb.DataStore("WorldClock");
 
-        var country = [];
-        var td = [];
-        var index = 0;
+        var country, td, index;
 
         $(function() {
             init();
@@ -228,6 +226,10 @@
         }
 
         function fetchRegisteredData() {
+            country = [];
+            td = [];
+            index = 0;
+
             WorldClock.fetchAll()
                 .then(function(res) {
                     dataLength = res.length;
