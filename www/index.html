@@ -117,6 +117,9 @@
 
         var country, td, index;
         var timeDifference = 0;
+        var days = [
+            "(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)"
+        ];
 
         $(function() {
             init();
@@ -217,6 +220,7 @@
             year = dateData.getFullYear();
             month = dateData.getMonth() + 1;
             date = dateData.getDate();
+            day = dateData.getDay();
             hour = dateData.getHours() + timeDifference;
             minute = dateData.getMinutes();
             second = dateData.getSeconds();
@@ -276,9 +280,17 @@
             if (hour<0) {
                 hour += 24;
                 date--;
+                day--;
             } else if (hour>=24) {
                 hour -= 24;
                 date++;
+                day++;
+            }
+            
+            if (day<0) {
+                day += 7;
+            } else if (day>=7) {
+                day -= 7;
             }
 
             let mon = month.toString().padStart(2, "0");
@@ -287,7 +299,9 @@
             let min = minute.toString().padStart(2, "0");
             let s = second.toString().padStart(2, "0");
 
-            $("#date").html(year+"/"+mon+"/"+d+" "+h+":"+min+":"+s);
+            $("#date").html(
+                year+"/"+mon+"/"+d+days[day]+" "+h+":"+min+":"+s
+            );
         }
 
         function isContinue(s) {
