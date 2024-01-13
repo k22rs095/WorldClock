@@ -192,6 +192,13 @@
 
         // ButtonBがクリックされた時の処理
         function btnBClick(e) {
+            if ($("#name").val()=="Japan") {
+                alert(
+                    "You can't remove this data!\n( This data is set to default! )"
+                );
+                return;
+            }
+
             if (!isContinue("remove")) {
                 return;
             }
